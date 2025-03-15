@@ -31,6 +31,8 @@ class UserOrderView(GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveMode
     @action(detail=True, methods=['post'])
     def cancel_payment(self, request, *args, **kwargs):
         order = self.get_object()
+        if order.payment_status == 'Paid':
+            return Response({'message': 'Payment already successful.'}, status=status.HTTP_400_BAD_REQUEST)
         order.payment_status = 'Cancelled'
         order.save()
         return Response({'message': 'Payment cancelled.'}, status=status.HTTP_200_OK)
