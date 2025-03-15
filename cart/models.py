@@ -11,6 +11,10 @@ class Cart(models.Model):
     
     def __str__(self):
         return f"Cart of {self.user.username}"
+    
+    def total_price(self):
+        total = sum(item.price() for item in self.items.all())
+        return total
 
 
 class CartItem(models.Model):
